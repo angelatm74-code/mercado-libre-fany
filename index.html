@@ -167,6 +167,17 @@
             border-color: #2a5298;
         }
 
+        .image-preview {
+            margin-top: 10px;
+            max-width: 200px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
         .add-btn {
             background: #2a5298;
             color: white;
@@ -182,6 +193,34 @@
         .add-btn:hover {
             background: #1e3c72;
             transform: scale(1.05);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 2px dashed #2a5298;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #2a5298;
+            font-weight: bold;
+        }
+
+        .file-input-label:hover {
+            background: #e8f0f7;
+        }
+
+        #imageUpload {
+            display: none;
         }
 
         @media (max-width: 600px) {
@@ -237,13 +276,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="productImage">URL de la Imagen:</label>
-                    <input 
-                        type="url" 
-                        id="productImage" 
-                        placeholder="Ej: https://ejemplo.com/imagen.jpg" 
-                        required
-                    >
+                    <label>Imagen del Producto:</label>
+                    <div class="file-input-wrapper">
+                        <label for="imageUpload" class="file-input-label">
+                            📸 Click aquí o arrastra una imagen
+                        </label>
+                        <input 
+                            type="file" 
+                            id="imageUpload" 
+                            accept="image/*"
+                            required
+                        >
+                    </div>
+                    <img id="imagePreview" class="image-preview" alt="Vista previa">
                 </div>
 
                 <div class="form-group">
@@ -273,6 +318,15 @@
             localStorage.setItem('mlProducts', JSON.stringify(products));
         }
 
+        // Convertir imagen a Base64
+        function imageToBase64(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                callback(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
         // Mostrar productos
         function displayProducts(products) {
             const container = document.getElementById('productsContainer');
@@ -298,22 +352,44 @@
             `).join('');
         }
 
+        // Preview de imagen
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         // Agregar producto
         document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const name = document.getElementById('productName').value;
-            const image = document.getElementById('productImage').value;
+            const imageFile = document.getElementById('imageUpload').files[0];
             const link = document.getElementById('productLink').value;
 
-            const products = loadProducts();
-            products.push({ name, image, link });
-            saveProducts(products);
+            if (!imageFile) {
+                alert('Por favor selecciona una imagen');
+                return;
+            }
 
-            // Limpiar formulario
-            this.reset();
-            displayProducts(products);
-            document.getElementById('searchInput').value = '';
+            imageToBase64(imageFile, function(base64) {
+                const products = loadProducts();
+                products.push({ name, image: base64, link });
+                saveProducts(products);
+
+                // Limpiar formulario
+                document.getElementById('productForm').reset();
+                document.getElementById('imagePreview').classList.remove('show');
+                displayProducts(products);
+                document.getElementById('searchInput').value = '';
+            });
         });
 
         // Eliminar producto
@@ -340,6 +416,40 @@
 
         // Inicializar
         displayProducts(loadProducts());
+
+        // Drag and drop
+        const fileInput = document.getElementById('imageUpload');
+        const label = document.querySelector('.file-input-label');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            label.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            label.addEventListener(eventName, () => {
+                label.style.background = '#d0e0f0';
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            label.addEventListener(eventName, () => {
+                label.style.background = '#e8f0f7';
+            });
+        });
+
+        label.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            
+            const event = new Event('change', { bubbles: true });
+            fileInput.dispatchEvent(event);
+        });
     </script>
 </body>
 </html>
