@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdance, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             padding: 20px;
@@ -41,32 +41,43 @@
             opacity: 0.9;
         }
 
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
         .auth-section {
             background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+            padding: 10px 15px;
+            border-radius: 25px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
         .auth-section input {
-            padding: 10px;
+            padding: 8px 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            margin-right: 10px;
-            font-size: 1em;
+            font-size: 0.95em;
+            width: 150px;
         }
 
-        .auth-btn {
+        .auth-btn, .logout-btn {
             background: #2a5298;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
+            white-space: nowrap;
         }
 
         .auth-btn:hover {
@@ -75,17 +86,19 @@
 
         .logout-btn {
             background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            float: right;
         }
 
         .logout-btn:hover {
             background: #cc0000;
+        }
+
+        .status-msg {
+            color: #4CAF50;
+            font-weight: bold;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .search-container {
@@ -99,13 +112,11 @@
             border: none;
             border-radius: 50px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
         }
 
         .search-input:focus {
             outline: none;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            transform: scale(1.02);
         }
 
         .products-grid {
@@ -120,11 +131,9 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             display: flex;
             flex-direction: column;
-            height: 100%;
-            position: relative;
         }
 
         .product-card:hover {
@@ -132,12 +141,12 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
-        .product-card a {
+        .product-link {
             text-decoration: none;
             color: inherit;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            flex: 1;
         }
 
         .product-image-container {
@@ -161,16 +170,12 @@
         .product-info {
             padding: 15px;
             flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
         .product-name {
             font-size: 1.1em;
             font-weight: bold;
             color: #1e3c72;
-            margin-bottom: 10px;
             line-height: 1.3;
         }
 
@@ -182,15 +187,17 @@
             display: flex;
             gap: 5px;
             padding: 10px;
+            background: #f9f9f9;
         }
 
         .edit-btn, .delete-btn {
             flex: 1;
-            padding: 10px;
+            padding: 8px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 0.9em;
             transition: all 0.3s;
         }
 
@@ -225,6 +232,11 @@
             border-radius: 15px;
             margin-top: 40px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .add-product-section.visible {
+            display: block;
         }
 
         .add-product-section h2 {
@@ -244,23 +256,20 @@
             font-weight: bold;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 10px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-family: inherit;
-            transition: border-color 0.3s;
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #2a5298;
         }
 
-        .add-btn {
+        .add-btn, .save-btn {
             background: #2a5298;
             color: white;
             border: none;
@@ -268,13 +277,12 @@
             font-size: 1em;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
             font-weight: bold;
+            transition: all 0.3s;
         }
 
-        .add-btn:hover {
+        .add-btn:hover, .save-btn:hover {
             background: #1e3c72;
-            transform: scale(1.05);
         }
 
         .modal {
@@ -286,38 +294,52 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
             background-color: white;
-            margin: 10% auto;
             padding: 30px;
             border-radius: 15px;
-            width: 80%;
+            width: 90%;
             max-width: 500px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-        }
-
-        .modal h2 {
-            color: #1e3c72;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
 
-        .hidden {
-            display: none;
+        .modal-header h2 {
+            color: #1e3c72;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #cc0000;
         }
 
         @media (max-width: 600px) {
@@ -325,21 +347,25 @@
                 font-size: 1.8em;
             }
 
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .auth-section {
+                flex-direction: column;
+            }
+
+            .auth-section input {
+                width: 100%;
+            }
+
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 15px;
             }
 
             .product-image-container {
                 height: 180px;
-            }
-
-            .add-product-section {
-                padding: 20px;
-            }
-
-            .product-actions {
-                flex-direction: column;
             }
         }
     </style>
@@ -351,13 +377,14 @@
             <p>Mercado Libre - Enlaces de afiliados</p>
         </header>
 
-        <div class="auth-section" id="authSection">
-            <input type="password" id="passwordInput" placeholder="Ingresa contraseña para editar" autocomplete="off">
-            <button class="auth-btn" onclick="login()">Acceder</button>
-            <span id="authStatus" style="margin-left: 20px; color: #999;"></span>
+        <div class="top-bar">
+            <div class="auth-section">
+                <input type="password" id="passwordInput" placeholder="Contraseña" autocomplete="off">
+                <button class="auth-btn" onclick="login()">Entrar</button>
+            </div>
+            <div id="statusDiv"></div>
+            <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display: none;">Cerrar</button>
         </div>
-
-        <button class="logout-btn hidden" id="logoutBtn" onclick="logout()">Cerrar Sesión</button>
 
         <div class="search-container">
             <input 
@@ -365,50 +392,28 @@
                 id="searchInput" 
                 class="search-input" 
                 placeholder="🔍 Busca un producto..."
-                autocomplete="off"
             >
         </div>
 
         <div id="productsContainer" class="products-grid"></div>
+        <div id="emptyMessage" class="empty-message" style="display: none;">No hay productos aún</div>
 
-        <div id="emptyMessage" class="empty-message" style="display: none;">
-            No hay productos aún. ¡Agrega algunos!
-        </div>
-
-        <div class="add-product-section hidden" id="addProductSection">
-            <h2>➕ Agregar Nuevo Producto</h2>
+        <div class="add-product-section" id="addProductSection">
+            <h2>➕ Agregar Producto</h2>
             <form id="productForm">
                 <div class="form-group">
-                    <label for="productName">Nombre del Producto:</label>
-                    <input 
-                        type="text" 
-                        id="productName" 
-                        placeholder="Ej: Taladro DeWalt" 
-                        required
-                    >
+                    <label>Nombre:</label>
+                    <input type="text" id="productName" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="productImage">URL de la Imagen (Google Drive, Imgur, etc):</label>
-                    <input 
-                        type="url" 
-                        id="productImage" 
-                        placeholder="Ej: https://i.imgur.com/..." 
-                        required
-                    >
+                    <label>URL de Imagen:</label>
+                    <input type="url" id="productImage" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="productLink">Link de Afiliado (Mercado Libre):</label>
-                    <input 
-                        type="url" 
-                        id="productLink" 
-                        placeholder="Ej: https://mercadolibre.com/..." 
-                        required
-                    >
+                    <label>Link Mercado Libre:</label>
+                    <input type="url" id="productLink" required>
                 </div>
-
-                <button type="submit" class="add-btn">Agregar Producto</button>
+                <button type="submit" class="add-btn">Agregar</button>
             </form>
         </div>
     </div>
@@ -416,189 +421,153 @@
     <!-- Modal para editar -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
-            <h2>✏️ Editar Producto</h2>
+            <div class="modal-header">
+                <h2>✏️ Editar Producto</h2>
+                <button class="close-btn" onclick="closeEdit()">×</button>
+            </div>
             <form id="editForm">
                 <div class="form-group">
-                    <label for="editProductName">Nombre del Producto:</label>
-                    <input type="text" id="editProductName" required>
+                    <label>Nombre:</label>
+                    <input type="text" id="editName" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="editProductImage">URL de la Imagen:</label>
-                    <input type="url" id="editProductImage" required>
+                    <label>URL de Imagen:</label>
+                    <input type="url" id="editImage" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="editProductLink">Link de Afiliado:</label>
-                    <input type="url" id="editProductLink" required>
+                    <label>Link Mercado Libre:</label>
+                    <input type="url" id="editLink" required>
                 </div>
-
-                <button type="submit" class="add-btn">Guardar Cambios</button>
+                <button type="submit" class="save-btn">Guardar</button>
             </form>
         </div>
     </div>
 
     <script>
-        const PASSWORD = "fany123"; // Cambia esto por una contraseña segura
+        const PASSWORD = "fany123";
         let isLoggedIn = false;
-        let editingIndex = -1;
+        let editIndex = -1;
 
-        // Cargar productos desde localStorage
         function loadProducts() {
-            const stored = localStorage.getItem('mlProducts');
-            return stored ? JSON.parse(stored) : [];
+            return JSON.parse(localStorage.getItem('mlProducts') || '[]');
         }
 
-        // Guardar productos en localStorage
         function saveProducts(products) {
             localStorage.setItem('mlProducts', JSON.stringify(products));
         }
 
-        // Login
         function login() {
-            const password = document.getElementById('passwordInput').value;
-            if (password === PASSWORD) {
+            const pwd = document.getElementById('passwordInput').value;
+            if (pwd === PASSWORD) {
                 isLoggedIn = true;
-                document.getElementById('authSection').innerHTML = '<span style="color: #4CAF50; font-weight: bold;">✓ Modo Editor Activado</span>';
-                document.getElementById('logoutBtn').classList.remove('hidden');
-                document.getElementById('addProductSection').classList.remove('hidden');
                 document.getElementById('passwordInput').value = '';
+                document.getElementById('statusDiv').innerHTML = '<div class="status-msg">✓ Editor Activo</div>';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('addProductSection').classList.add('visible');
                 displayProducts(loadProducts());
-            } else if (password) {
-                alert('Contraseña incorrecta');
-                document.getElementById('passwordInput').value = '';
+            } else if (pwd) {
+                alert('❌ Contraseña incorrecta');
             }
         }
 
-        // Logout
         function logout() {
             isLoggedIn = false;
-            document.getElementById('authSection').innerHTML = '<input type="password" id="passwordInput" placeholder="Ingresa contraseña para editar" autocomplete="off"><button class="auth-btn" onclick="login()">Acceder</button><span id="authStatus" style="margin-left: 20px; color: #999;"></span>';
-            document.getElementById('logoutBtn').classList.add('hidden');
-            document.getElementById('addProductSection').classList.add('hidden');
-            document.getElementById('passwordInput').value = '';
+            document.getElementById('statusDiv').innerHTML = '';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('addProductSection').classList.remove('visible');
             displayProducts(loadProducts());
         }
 
-        // Mostrar productos
         function displayProducts(products) {
             const container = document.getElementById('productsContainer');
-            const emptyMessage = document.getElementById('emptyMessage');
+            const empty = document.getElementById('emptyMessage');
 
-            if (products.length === 0) {
+            if (!products.length) {
                 container.innerHTML = '';
-                emptyMessage.style.display = 'block';
+                empty.style.display = 'block';
                 return;
             }
 
-            emptyMessage.style.display = 'none';
-            container.innerHTML = products.map((product, index) => `
+            empty.style.display = 'none';
+            container.innerHTML = products.map((p, i) => `
                 <div class="product-card">
-                    <a href="${product.link}" target="_blank" rel="noopener noreferrer">
+                    <a href="${p.link}" target="_blank" class="product-link">
                         <div class="product-image-container">
-                            <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/200?text=Imagen+no+disponible'">
+                            <img src="${p.image}" alt="${p.name}" class="product-image" onerror="this.src='https://via.placeholder.com/200?text=No+disponible'">
                         </div>
                         <div class="product-info">
-                            <div class="product-name">${product.name}</div>
+                            <div class="product-name">${p.name}</div>
                         </div>
                     </a>
                     ${isLoggedIn ? `
                         <div class="product-actions">
-                            <button type="button" onclick="openEditModal(${index})" class="edit-btn">✏️ Editar</button>
-                            <button type="button" onclick="deleteProduct(${index})" class="delete-btn">🗑️ Eliminar</button>
+                            <button type="button" class="edit-btn" onclick="openEdit(${i})">✏️ Editar</button>
+                            <button type="button" class="delete-btn" onclick="deleteProduct(${i})">🗑️ Eliminar</button>
                         </div>
                     ` : ''}
                 </div>
             `).join('');
         }
 
-        // Agregar producto
-        document.getElementById('productForm').addEventListener('submit', function(e) {
+        document.getElementById('productForm').addEventListener('submit', (e) => {
             e.preventDefault();
-
-            const name = document.getElementById('productName').value;
-            const image = document.getElementById('productImage').value;
-            const link = document.getElementById('productLink').value;
-
             const products = loadProducts();
-            products.push({ name, image, link });
+            products.push({
+                name: document.getElementById('productName').value,
+                image: document.getElementById('productImage').value,
+                link: document.getElementById('productLink').value
+            });
             saveProducts(products);
-
-            // Limpiar formulario
-            this.reset();
+            document.getElementById('productForm').reset();
             displayProducts(products);
-            document.getElementById('searchInput').value = '';
         });
 
-        // Abrir modal de edición
-        function openEditModal(index) {
-            editingIndex = index;
+        function openEdit(i) {
             const products = loadProducts();
-            const product = products[index];
-
-            document.getElementById('editProductName').value = product.name;
-            document.getElementById('editProductImage').value = product.image;
-            document.getElementById('editProductLink').value = product.link;
-
-            document.getElementById('editModal').style.display = 'block';
+            const p = products[i];
+            editIndex = i;
+            document.getElementById('editName').value = p.name;
+            document.getElementById('editImage').value = p.image;
+            document.getElementById('editLink').value = p.link;
+            document.getElementById('editModal').classList.add('show');
         }
 
-        // Cerrar modal de edición
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-            editingIndex = -1;
+        function closeEdit() {
+            document.getElementById('editModal').classList.remove('show');
+            editIndex = -1;
         }
 
-        // Guardar cambios
-        document.getElementById('editForm').addEventListener('submit', function(e) {
+        document.getElementById('editForm').addEventListener('submit', (e) => {
             e.preventDefault();
-
             const products = loadProducts();
-            products[editingIndex] = {
-                name: document.getElementById('editProductName').value,
-                image: document.getElementById('editProductImage').value,
-                link: document.getElementById('editProductLink').value
+            products[editIndex] = {
+                name: document.getElementById('editName').value,
+                image: document.getElementById('editImage').value,
+                link: document.getElementById('editLink').value
             };
-
             saveProducts(products);
             displayProducts(products);
-            closeEditModal();
+            closeEdit();
         });
 
-        // Eliminar producto
-        function deleteProduct(index) {
-            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        function deleteProduct(i) {
+            if (confirm('¿Eliminar este producto?')) {
                 const products = loadProducts();
-                products.splice(index, 1);
+                products.splice(i, 1);
                 saveProducts(products);
                 displayProducts(products);
             }
         }
 
-        // Buscador en tiempo real
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
             let products = loadProducts();
-
-            if (searchTerm) {
-                products = products.filter(product => 
-                    product.name.toLowerCase().includes(searchTerm)
-                );
+            if (term) {
+                products = products.filter(p => p.name.toLowerCase().includes(term));
             }
-
             displayProducts(products);
         });
 
-        // Cerrar modal si se clickea afuera
-        window.onclick = function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        // Inicializar
         displayProducts(loadProducts());
     </script>
 </body>
